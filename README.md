@@ -1,4 +1,4 @@
-# rag-learning
+# RAG-Learning
 
 此仓库用于学习大模型RAG的相关内容，目前为手搓实现，主要是llama-index和langchain不太好魔改。此仓库可以方便看论文的时候，实现一些小的实验。
 
