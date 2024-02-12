@@ -1,3 +1,3 @@
-# rag-leraning
+# rag-learning
 
 此仓库用于存储手搓的rag框架，方便看论文的时候实现思路，很轻易可以实现魔改
