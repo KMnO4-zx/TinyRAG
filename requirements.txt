@@ -1,0 +1,11 @@
+openai
+zhipuai
+numpy
+dotenv
+torch
+transformers
+tqdm
+PyPDF2
+markdown
+html2text
+tiktoken
