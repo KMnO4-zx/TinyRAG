@@ -1,7 +1,7 @@
 openai
 zhipuai
 numpy
-dotenv
+python-dotenv
 torch
 transformers
 tqdm
