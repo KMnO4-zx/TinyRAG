@@ -34,7 +34,7 @@ vector.persist(path='storage') # 将向量和文档内容保存到storage目录�
 
 # vector.load_vector('./storage') # 加载本地的数据库
 
-question = '正向扫描的原理是什么？'
+question = 'git的原理是什么？'
 
 content = vector.query(question, model='zhipu', k=1)[0]
 chat = OpenAIChat(model='gpt-3.5-turbo-1106')
@@ -48,7 +48,7 @@ vector = VectorStore()
 
 vector.load_vector('./storage') # 加载本地的数据库
 
-question = '逆向纠错的原理是什么？'
+question = 'git的原理是什么？'
 
 content = vector.query(question, model='zhipu', k=1)[0]
 chat = OpenAIChat(model='gpt-3.5-turbo-1106')
