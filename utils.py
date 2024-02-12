@@ -45,12 +45,13 @@ class ReadFiles:
                     file_list.append(os.path.join(filepath, filename))
         return file_list
 
-    def get_content(self):
+
+    def get_content(self, max_token_len: int = 600, cover_content: int = 150):
         docs = []
         # 读取文件内容
         for file in self.file_list:
             content = self.read_file_content(file)
-            chunk_content = self.get_chunk(content)
+            chunk_content = self.get_chunk(content, max_token_len=max_token_len, cover_content=cover_content)
             docs.extend(chunk_content)
         return docs
 

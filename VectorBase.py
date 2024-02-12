@@ -20,7 +20,7 @@ class VectorStore:
     def __init__(self, document: List[str] = ['']) -> None:
         self.document = document
 
-    def get_vector(self, model: str = 'zhipu') -> List[List[float]]:
+    def get_vector(self, model: str = 'openai') -> List[List[float]]:
         if model == "openai":
             embedding = OpenAIEmbedding()
         elif model == "jina":
@@ -52,7 +52,7 @@ class VectorStore:
     def get_similarity(self, vector1: List[float], vector2: List[float]) -> float:
         return BaseEmbeddings.cosine_similarity(vector1, vector2)
 
-    def query(self, query: str, model: str = 'zhipu', k: int = 1) -> List[str]:
+    def query(self, query: str, model: str = 'openai', k: int = 1) -> List[str]:
         if not self.vectors:
             raise ValueError("No vectors found")
         if model == "openai":
@@ -66,13 +66,3 @@ class VectorStore:
         query_vector = embedding.get_embedding(query)
         result = np.array([self.get_similarity(query_vector, vector) for vector in self.vectors])
         return np.array(self.document)[result.argsort()[-k:][::-1]]
-
-
-# if __name__ == "__main__":
-#     from utils import ReadFiles
-#     # docs = ReadFiles('./data').get_content()
-#     vector = VectorStore()
-#     # vector.get_vector(model='zhipu')
-#     # vector.persist()
-#     vector.load_vector()
-#     print(vector.query("git如何管理分支", model='zhipu', k=1))
