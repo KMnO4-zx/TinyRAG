@@ -114,6 +114,23 @@ def query(self, query: str, model: str = 'openai', k: int = 1) -> List[str]:
 
 > 没有考虑生产环境使用，仅供学习使用
 
+## LLM 模型
+
+这里支持了`openai`模型和`InternLM2`模型，如果想要用其他的模型，大家可以在`LLM`中找到实现的方式。继承以下基类，然后在此基础上进行修改即可。
+
+```python
+class BaseModel:
+    def __init__(self, path: str = '') -> None:
+        self.path = path
+
+    def chat(self, prompt: str, history: List[dict], content: str) -> str:
+        pass
+
+    def load_model(self):
+        pass
+```
+
+
 # 参考文献
 
 [When Large Language Models Meet Vector Databases: A Survey](https://arxiv.org/abs/2402.01763)
