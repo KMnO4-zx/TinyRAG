@@ -3,6 +3,8 @@ zhipuai
 numpy
 python-dotenv
 torch
+torchvision
+torchaudio
 transformers
 tqdm
 PyPDF2
