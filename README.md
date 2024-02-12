@@ -112,7 +112,7 @@ def query(self, query: str, model: str = 'openai', k: int = 1) -> List[str]:
         return np.array(self.document)[result.argsort()[-k:][::-1]]
 ```
 
-> 没有考虑生产环境使用，仅供本人学习使用
+> 没有考虑生产环境使用，仅供学习使用
 
 # 参考文献
 
