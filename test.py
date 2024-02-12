@@ -1,11 +1,12 @@
-from Embeddings import BaseEmbeddings, OpenAIEmbedding, JinaEmbedding, ZhipuEmbedding
+from VectorBase import VectorStore
+from LLM import OpenAIChat
 
-embedding = ZhipuEmbedding()
-response1 = embedding.get_embedding('我不喜欢你')
-response2 = embedding.get_embedding('我喜欢你')
-print('Zhipu: ',embedding.cosine_similarity(response1, response2))
 
-embedding_openai = OpenAIEmbedding()
-response3 = embedding_openai.get_embedding('我喜欢你')
-response4 = embedding_openai.get_embedding('我不喜欢你')
-print('OpenAI: ',embedding_openai.cosine_similarity(response3, response4))
+vector = VectorStore()
+vector.load_vector()
+
+question = '逆向纠错的原理是什么？'
+
+content = vector.query(question, model='zhipu', k=1)[0]
+chat = OpenAIChat()
+print(chat.chat(question, [], content))
