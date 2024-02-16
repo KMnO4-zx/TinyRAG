@@ -17,9 +17,9 @@ pip install -r requirements.txt
 导入所使用的包
 
 ```python
-from VectorBase import VectorStore
-from utils import ReadFiles
-from LLM import OpenAIChat
+from RAG.VectorBase import VectorStore
+from RAG.utils import ReadFiles
+from RAG.LLM import OpenAIChat
 ```
 
 如果没有数据库那就按照如下代码：
