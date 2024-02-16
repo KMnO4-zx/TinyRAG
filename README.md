@@ -97,19 +97,19 @@ class BaseEmbeddings:
 
 ```python
 def query(self, query: str, model: str = 'openai', k: int = 1) -> List[str]:
-        if not self.vectors:
-            raise ValueError("No vectors found")
-        if model == "openai":
-            embedding = OpenAIEmbedding()
-        elif model == "jina":
-            embedding = JinaEmbedding()
-        elif model == "zhipu":
-            embedding = ZhipuEmbedding()
-        else:
-            raise ValueError("Model not supported")
-        query_vector = embedding.get_embedding(query)
-        result = np.array([self.get_similarity(query_vector, vector) for vector in self.vectors])
-        return np.array(self.document)[result.argsort()[-k:][::-1]]
+    if not self.vectors:
+        raise ValueError("No vectors found")
+    if model == "openai":
+        embedding = OpenAIEmbedding()
+    elif model == "jina":
+        embedding = JinaEmbedding()
+    elif model == "zhipu":
+        embedding = ZhipuEmbedding()
+    else:
+        raise ValueError("Model not supported")
+    query_vector = embedding.get_embedding(query)
+    result = np.array([self.get_similarity(query_vector, vector) for vector in self.vectors])
+    return np.array(self.document)[result.argsort()[-k:][::-1]]
 ```
 
 > 没有考虑生产环境使用，仅供学习使用
