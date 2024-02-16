@@ -11,7 +11,7 @@
 import os
 from typing import Dict, List, Optional, Tuple, Union
 import json
-from Embeddings import BaseEmbeddings, OpenAIEmbedding, JinaEmbedding, ZhipuEmbedding
+from RAG.Embeddings import BaseEmbeddings, OpenAIEmbedding, JinaEmbedding, ZhipuEmbedding
 import numpy as np
 from tqdm import tqdm
 

@@ -1,6 +1,6 @@
-from VectorBase import VectorStore
-from utils import ReadFiles
-from LLM import OpenAIChat
+from RAG.VectorBase import VectorStore
+from RAG.utils import ReadFiles
+from RAG.LLM import OpenAIChat
 
 
 # 没有保存数据库
