@@ -20,18 +20,11 @@ class VectorStore:
     def __init__(self, document: List[str] = ['']) -> None:
         self.document = document
 
-    def get_vector(self, model: str = 'openai', path: str = '') -> List[List[float]]:
-        if model == "openai":
-            embedding = OpenAIEmbedding()
-        elif model == "jina":
-            embedding = JinaEmbedding(path=path)
-        elif model == "zhipu":
-            embedding = ZhipuEmbedding()
-        else:
-            raise ValueError("Model not supported")
+    def get_vector(self, EmbeddingModel: BaseEmbeddings) -> List[List[float]]:
+        
         self.vectors = []
         for doc in tqdm(self.document, desc="Calculating embeddings"):
-            self.vectors.append(embedding.get_embedding(doc))
+            self.vectors.append(EmbeddingModel.get_embedding(doc))
         return self.vectors
 
     def persist(self, path: str = 'storage'):
@@ -52,18 +45,8 @@ class VectorStore:
     def get_similarity(self, vector1: List[float], vector2: List[float]) -> float:
         return BaseEmbeddings.cosine_similarity(vector1, vector2)
 
-    def query(self, query: str, model: str = 'openai', k: int = 1) -> List[str]:
-        if not self.vectors:
-            raise ValueError("No vectors found")
-        if model == "openai":
-            embedding = OpenAIEmbedding()
-        elif model == "jina":
-            embedding = JinaEmbedding()
-        elif model == "zhipu":
-            embedding = ZhipuEmbedding()
-        else:
-            raise ValueError("Model not supported")
-        query_vector = embedding.get_embedding(query)
+    def query(self, query: str, EmbeddingModel: BaseEmbeddings, k: int = 1) -> List[str]:
+        query_vector = EmbeddingModel.get_embedding(query)
         result = np.array([self.get_similarity(query_vector, vector)
                           for vector in self.vectors])
         return np.array(self.document)[result.argsort()[-k:][::-1]]
