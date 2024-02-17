@@ -49,4 +49,4 @@ class VectorStore:
         query_vector = EmbeddingModel.get_embedding(query)
         result = np.array([self.get_similarity(query_vector, vector)
                           for vector in self.vectors])
-        return np.array(self.document)[result.argsort()[-k:][::-1]]
+        return np.array(self.document)[result.argsort()[-k:][::-1]].tolist()
