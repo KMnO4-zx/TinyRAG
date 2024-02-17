@@ -20,11 +20,11 @@ class VectorStore:
     def __init__(self, document: List[str] = ['']) -> None:
         self.document = document
 
-    def get_vector(self, model: str = 'openai') -> List[List[float]]:
+    def get_vector(self, model: str = 'openai', path: str = '') -> List[List[float]]:
         if model == "openai":
             embedding = OpenAIEmbedding()
         elif model == "jina":
-            embedding = JinaEmbedding()
+            embedding = JinaEmbedding(path=path)
         elif model == "zhipu":
             embedding = ZhipuEmbedding()
         else:
@@ -64,5 +64,6 @@ class VectorStore:
         else:
             raise ValueError("Model not supported")
         query_vector = embedding.get_embedding(query)
-        result = np.array([self.get_similarity(query_vector, vector) for vector in self.vectors])
+        result = np.array([self.get_similarity(query_vector, vector)
+                          for vector in self.vectors])
         return np.array(self.document)[result.argsort()[-k:][::-1]]
