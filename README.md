@@ -27,16 +27,16 @@ from RAG.LLM import OpenAIChat
 > 可以使用`VectorStore.persist()`保存到向量数据库。
 
 ```python
+# 没有保存数据库
 docs = ReadFiles('./data').get_content(max_token_len=600, cover_content=150) # 获得data目录下的所有文件内容并分割
+embedding = JinaEmbedding("your model path") # 创建EmbeddingModel
 vector = VectorStore(docs)
-vector.get_vector(model='zhipu')
+vector.get_vector(EmbeddingModel=embedding)
 vector.persist(path='storage') # 将向量和文档内容保存到storage目录下，下次再用就可以直接加载本地的数据库
 
-# vector.load_vector('./storage') # 加载本地的数据库
+question = 'git的分支原理？'
 
-question = 'git的原理是什么？'
-
-content = vector.query(question, model='zhipu', k=1)[0]
+content = vector.query(question, EmbeddingModel=embedding, k=1)[0]
 chat = OpenAIChat(model='gpt-3.5-turbo-1106')
 print(chat.chat(question, [], content))
 ```
@@ -48,9 +48,12 @@ vector = VectorStore()
 
 vector.load_vector('./storage') # 加载本地的数据库
 
-question = 'git的原理是什么？'
+embedding = JinaEmbedding("your model path")
 
-content = vector.query(question, model='zhipu', k=1)[0]
+question = 'git的分支原理？'
+
+content = vector.query(question, EmbeddingModel=embedding, k=1)[0]
+
 chat = OpenAIChat(model='gpt-3.5-turbo-1106')
 print(chat.chat(question, [], content))
 ```
@@ -96,19 +99,10 @@ class BaseEmbeddings:
 在向量检索的时候仅使用`Numpy`进行加速，代码非常容易理解和修改。
 
 ```python
-def query(self, query: str, model: str = 'openai', k: int = 1) -> List[str]:
-    if not self.vectors:
-        raise ValueError("No vectors found")
-    if model == "openai":
-        embedding = OpenAIEmbedding()
-    elif model == "jina":
-        embedding = JinaEmbedding()
-    elif model == "zhipu":
-        embedding = ZhipuEmbedding()
-    else:
-        raise ValueError("Model not supported")
-    query_vector = embedding.get_embedding(query)
-    result = np.array([self.get_similarity(query_vector, vector) for vector in self.vectors])
+def query(self, query: str, EmbeddingModel: BaseEmbeddings, k: int = 1) -> List[str]:
+    query_vector = EmbeddingModel.get_embedding(query)
+    result = np.array([self.get_similarity(query_vector, vector)
+                        for vector in self.vectors])
     return np.array(self.document)[result.argsort()[-k:][::-1]]
 ```
 
