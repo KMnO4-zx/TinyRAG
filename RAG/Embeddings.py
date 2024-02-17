@@ -68,7 +68,7 @@ class JinaEmbedding(BaseEmbeddings):
         self._model = self.load_model()
         
     def get_embedding(self, text: str) -> List[float]:
-        return self._model.encode([text])[0]
+        return self._model.encode([text])[0].tolist()
     
     def load_model(self):
         import torch
