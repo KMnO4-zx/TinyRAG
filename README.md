@@ -1,10 +1,14 @@
 # RAG-Learning
 
-此仓库用于学习大模型RAG的相关内容，目前为手搓实现，主要是llama-index和langchain不太好魔改。此仓库可以方便看论文的时候，实现一些小的实验。
-
-以下为RAG的实现过程。
+此仓库用于学习大模型RAG的相关内容，目前为手搓实现，主要是llama-index和langchain不太好魔改。此仓库可以方便看论文的时候，实现一些小的实验。以下为本仓库的RAG整体框架图。
 
 ![alt text](images/Retrieval-Augmented%20Generation（RAG-Learning）.png)
+
+以下为笔者所构思的RAG实现过程：
+
+<div align="center">
+    <img src="images/RAG.png" alt="RAG" width="70%">
+</div>
 
 # QuickStrat
 
