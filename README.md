@@ -4,7 +4,7 @@
 
 以下为RAG的实现过程。
 
-![alt text](images/image.png)
+![alt text](images/Retrieval-Augmented%20Generation（RAG-Learning）.png)
 
 # QuickStrat
 
