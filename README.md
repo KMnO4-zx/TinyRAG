@@ -12,7 +12,13 @@ RAG 通过在语言模型生成答案之前，先从广泛的文档数据库中�
 
 ![alt text](images/Retrieval-Augmented%20Generation（RAG-Learning）.png)
 
-以下为笔者所构思的RAG实现过程：
+以下为笔者所构思的RAG实现过程，这里面主要包括包括三个基本步骤：
+
+1. 索引 — 将文档库分割成较短的 Chunk，并通过编码器构建向量索引。
+
+2. 检索 — 根据问题和 chunks 的相似度检索相关文档片段。
+
+3. 生成 — 以检索到的上下文为条件，生成问题的回答。
 
 <div align="center">
     <img src="images/RAG.png" alt="RAG" width="70%">
