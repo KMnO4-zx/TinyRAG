@@ -1,4 +1,4 @@
-# RAG-Learning
+# Hand on RAG
 
 ## 什么是RAG？
 
@@ -21,7 +21,7 @@ RAG 通过在语言模型生成答案之前，先从广泛的文档数据库中�
 3. 生成 — 以检索到的上下文为条件，生成问题的回答。
 
 <div align="center">
-    <img src="images/RAG.png" alt="RAG" width="70%">
+    <img src="images/RAG.png" alt="RAG" width="100%">
 </div>
 
 # QuickStrat
