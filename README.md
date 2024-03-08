@@ -1,4 +1,4 @@
-# Hand on RAG
+# Hands on TinyRAG
 
 ## 什么是RAG？
 
