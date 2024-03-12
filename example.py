@@ -15,7 +15,7 @@ from RAG.Embeddings import JinaEmbedding, ZhipuEmbedding
 
 # question = '正向扫描的原理是什么？'
 
-# content = vector.query(question, model='zhipu', k=1)[0]
+# content = vector.query(question, EmbeddingModel=embedding, k=1)[0]
 # chat = OpenAIChat(model='gpt-3.5-turbo-1106')
 # print(chat.chat(question, [], content))
 
