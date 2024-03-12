@@ -1,4 +1,4 @@
-# TinyRAG
+# Tiny-RAG
 
 接下来我会带领大家一步一步的实现一个简单的RAG模型，这个模型是基于RAG的一个简化版本，我们称之为Tiny-RAG。Tiny-RAG是一个基于RAG的简化版本，它只包含了RAG的核心功能，即Retrieval和Generation。Tiny-RAG的目的是为了帮助大家更好的理解RAG模型的原理和实现。
 
@@ -20,7 +20,7 @@ RAG的基本结构有哪些呢？
 - 要有一个检索模块，用来根据 Query （问题）检索相关的文档片段。
 - 要有一个大模型模块，用来根据检索出来的文档回答用户的问题。
 
-OK，那上述这些也就是 TinyRAG 仓库的所有模块内容。
+OK，那上述这些也就是 Tiny-RAG 仓库的所有模块内容。
 
 ![](../images/Retrieval-Augmented%20Generation（RAG-Learning）.png)
 
