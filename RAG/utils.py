@@ -17,6 +17,9 @@ import html2text
 import json
 from tqdm import tqdm
 import tiktoken
+from bs4 import BeautifulSoup
+import re
+
 enc = tiktoken.get_encoding("cl100k_base")
 
 
@@ -112,10 +115,11 @@ class ReadFiles:
         with open(file_path, 'r', encoding='utf-8') as file:
             md_text = file.read()
             html_text = markdown.markdown(md_text)
-            # 从HTML中提取纯文本
-            text_maker = html2text.HTML2Text()
-            text_maker.ignore_links = True
-            text = text_maker.handle(html_text)
+            # 使用BeautifulSoup从HTML中提取纯文本
+            soup = BeautifulSoup(html_text, 'html.parser')
+            plain_text = soup.get_text()
+            # 使用正则表达式移除网址链接
+            text = re.sub(r'http\S+', '', plain_text) 
             return text
 
     @classmethod

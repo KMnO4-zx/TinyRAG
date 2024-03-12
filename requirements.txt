@@ -11,3 +11,4 @@ PyPDF2
 markdown
 html2text
 tiktoken
+beautifulsoup4
