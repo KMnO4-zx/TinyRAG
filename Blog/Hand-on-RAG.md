@@ -64,7 +64,7 @@ class BaseEmbeddings:
         return dot_product / magnitude
 ```
 
-观察一下`BaseEmbeddings`基类都有什么方法，首先有一个`get_embedding`方法，这个方法是用来获取文本的向量表示的，然后有一个`cosine_similarity`方法，这个方法是用来计算两个向量之间的余弦相似度的。其次在初始化类的时候设置了，模型的路径或者是否是API模型。比如使用OpenAI的Embedding API的话就需要设置`self.is_api=Ture`。
+观察一下`BaseEmbeddings`基类都有什么方法，首先有一个`get_embedding`方法，这个方法是用来获取文本的向量表示的，然后有一个`cosine_similarity`方法，这个方法是用来计算两个向量之间的余弦相似度的。其次在初始化类的时候设置了，模型的路径和是否是API模型。比如使用OpenAI的Embedding API的话就需要设置`self.is_api=Ture`。
 
 继承`BaseEmbeddings`类的话，就只需要编写`get_embedding`方法即可，`cosine_similarity`方法会被继承下来，直接用就行。这就是编写基类的好处。
 
