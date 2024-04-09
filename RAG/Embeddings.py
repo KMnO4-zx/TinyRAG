@@ -13,6 +13,7 @@ from copy import copy
 from typing import Dict, List, Optional, Tuple, Union
 import numpy as np
 
+os.environ['CURL_CA_BUNDLE'] = ''
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())
 

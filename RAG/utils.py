@@ -65,14 +65,32 @@ class ReadFiles:
         curr_len = 0
         curr_chunk = ''
 
-        lines = text.split('\n')  # 假设以换行符分割文本为行
+        token_len = max_token_len - cover_content
+        lines = text.splitlines()  # 假设以换行符分割文本为行
 
         for line in lines:
             line = line.replace(' ', '')
             line_len = len(enc.encode(line))
             if line_len > max_token_len:
-                print('warning line_len = ', line_len)
-            if curr_len + line_len <= max_token_len:
+                # 如果单行长度就超过限制，则将其分割成多个块
+                num_chunks = (line_len + token_len - 1) // token_len
+                for i in range(num_chunks):
+                    start = i * token_len
+                    end = start + token_len
+                    # 避免跨单词分割
+                    while not line[start:end].rstrip().isspace():
+                        start += 1
+                        end += 1
+                        if start >= line_len:
+                            break
+                    curr_chunk = curr_chunk[-cover_content:] + line[start:end]
+                    chunk_text.append(curr_chunk)
+                # 处理最后一个块
+                start = (num_chunks - 1) * token_len
+                curr_chunk = curr_chunk[-cover_content:] + line[start:end]
+                chunk_text.append(curr_chunk)
+                
+            if curr_len + line_len <= token_len:
                 curr_chunk += line
                 curr_chunk += '\n'
                 curr_len += line_len
