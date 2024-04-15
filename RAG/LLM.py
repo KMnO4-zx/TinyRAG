@@ -7,6 +7,7 @@
 @Version :   1.0
 @Desc    :   None
 '''
+import os
 from typing import Dict, List, Optional, Tuple, Union
 
 PROMPT_TEMPLATE = dict(
@@ -46,7 +47,6 @@ class OpenAIChat(BaseModel):
 
     def chat(self, prompt: str, history: List[dict], content: str) -> str:
         from openai import OpenAI
-        import os
         client = OpenAI()
         client.api_key = os.getenv("OPENAI_API_KEY")   
         client.base_url = os.getenv("OPENAI_BASE_URL")
@@ -75,3 +75,21 @@ class InternLMChat(BaseModel):
         from transformers import AutoTokenizer, AutoModelForCausalLM
         self.tokenizer = AutoTokenizer.from_pretrained(self.path, trust_remote_code=True)
         self.model = AutoModelForCausalLM.from_pretrained(self.path, torch_dtype=torch.float16, trust_remote_code=True).cuda()
+
+class DashscopeChat(BaseModel):
+    def __init__(self, path: str = '', model: str = "qwen-turbo") -> None:
+        super().__init__(path)
+        self.model = model
+
+    def chat(self, prompt: str, history: List[Dict], content: str) -> str:
+        import dashscope
+        dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
+        history.append({'role': 'user', 'content': PROMPT_TEMPLATE['RAG_PROMPT_TEMPALTE'].format(question=prompt, context=content)})
+        response = dashscope.Generation.call(
+            model=self.model,
+            messages=history,
+            result_format='message',
+            max_tokens=150,
+            temperature=0.1
+        )
+        return response.output.choices[0].message.content
