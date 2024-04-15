@@ -97,3 +97,21 @@ class ZhipuEmbedding(BaseEmbeddings):
         input=text,
         )
         return response.data[0].embedding
+
+class DashscopeEmbedding(BaseEmbeddings):
+    """
+    class for Dashscope embeddings
+    """
+    def __init__(self, path: str = '', is_api: bool = True) -> None:
+        super().__init__(path, is_api)
+        if self.is_api:
+            import dashscope
+            dashscope.api_key = os.getenv("DASHSCOPE_API_KEY")
+            self.client = dashscope.TextEmbedding
+
+    def get_embedding(self, text: str, model: str='text-embedding-v1') -> List[float]:
+        response = self.client.call(
+            model=model,
+            input=text
+        )
+        return response.output['embeddings'][0]['embedding']
