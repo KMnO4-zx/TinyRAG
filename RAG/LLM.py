@@ -93,3 +93,21 @@ class DashscopeChat(BaseModel):
             temperature=0.1
         )
         return response.output.choices[0].message.content
+    
+
+class ZhipuChat(BaseModel):
+    def __init__(self, path: str = '', model: str = "glm-4") -> None:
+        super().__init__(path)
+        from zhipuai import ZhipuAI
+        self.client = ZhipuAI(api_key=os.getenv("ZHIPUAI_API_KEY"))
+        self.model = model
+
+    def chat(self, prompt: str, history: List[Dict], content: str) -> str:
+        history.append({'role': 'user', 'content': PROMPT_TEMPLATE['RAG_PROMPT_TEMPALTE'].format(question=prompt, context=content)})
+        response = self.client.chat.completions.create(
+            model=self.model,
+            messages=history,
+            max_tokens=150,
+            temperature=0.1
+        )
+        return response.choices[0].message
