@@ -25,10 +25,10 @@ class BaseEmbeddings:
     def __init__(self, path: str, is_api: bool) -> None:
         self.path = path
         self.is_api = is_api
-    
+
     def get_embedding(self, text: str, model: str) -> List[float]:
         raise NotImplementedError
-    
+
     @classmethod
     def cosine_similarity(cls, vector1: List[float], vector2: List[float]) -> float:
         """
@@ -39,7 +39,7 @@ class BaseEmbeddings:
         if not magnitude:
             return 0
         return dot_product / magnitude
-    
+
 
 class OpenAIEmbedding(BaseEmbeddings):
     """
@@ -52,7 +52,7 @@ class OpenAIEmbedding(BaseEmbeddings):
             self.client = OpenAI()
             self.client.api_key = os.getenv("OPENAI_API_KEY")
             self.client.base_url = os.getenv("OPENAI_BASE_URL")
-    
+
     def get_embedding(self, text: str, model: str = "text-embedding-3-large") -> List[float]:
         if self.is_api:
             text = text.replace("\n", " ")
@@ -67,10 +67,10 @@ class JinaEmbedding(BaseEmbeddings):
     def __init__(self, path: str = 'jinaai/jina-embeddings-v2-base-zh', is_api: bool = False) -> None:
         super().__init__(path, is_api)
         self._model = self.load_model()
-        
+
     def get_embedding(self, text: str) -> List[float]:
         return self._model.encode([text])[0].tolist()
-    
+
     def load_model(self):
         import torch
         from transformers import AutoModel
@@ -89,8 +89,8 @@ class ZhipuEmbedding(BaseEmbeddings):
         super().__init__(path, is_api)
         if self.is_api:
             from zhipuai import ZhipuAI
-            self.client = ZhipuAI(api_key=os.getenv("ZHIPUAI_API_KEY")) 
-    
+            self.client = ZhipuAI(api_key=os.getenv("ZHIPUAI_API_KEY"))
+
     def get_embedding(self, text: str) -> List[float]:
         response = self.client.embeddings.create(
         model="embedding-2",
@@ -115,3 +115,35 @@ class DashscopeEmbedding(BaseEmbeddings):
             input=text
         )
         return response.output['embeddings'][0]['embedding']
+
+
+class BgeEmbedding(BaseEmbeddings):
+    """
+    class for BGE embeddings
+    """
+
+    def __init__(self, path: str = 'BAAI/bge-base-zh-v1.5', is_api: bool = False) -> None:
+        super().__init__(path, is_api)
+        self._model, self._tokenizer = self.load_model(path)
+
+    def get_embedding(self, text: str) -> List[float]:
+        import torch
+        encoded_input = self._tokenizer([text], padding=True, truncation=True, return_tensors='pt')
+        encoded_input = {k: v.to(self._model.device) for k, v in encoded_input.items()}
+        with torch.no_grad():
+            model_output = self._model(**encoded_input)
+            sentence_embeddings = model_output[0][:, 0]
+        sentence_embeddings = torch.nn.functional.normalize(sentence_embeddings, p=2, dim=1)
+        return sentence_embeddings[0].tolist()
+
+    def load_model(self, path: str):
+        import torch
+        from transformers import AutoModel, AutoTokenizer
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+        else:
+            device = torch.device("cpu")
+        tokenizer = AutoTokenizer.from_pretrained(path)
+        model = AutoModel.from_pretrained(path).to(device)
+        model.eval()
+        return model, tokenizer
