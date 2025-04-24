@@ -106,6 +106,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+.conda/
 .env
 .venv
 env/
@@ -218,5 +219,9 @@ log/result
 
 # model
 model/
+models/
 
 *.yaml
+
+# scripts
+scripts/

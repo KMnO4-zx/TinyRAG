@@ -111,3 +111,25 @@ class ZhipuChat(BaseModel):
             temperature=0.1
         )
         return response.choices[0].message
+
+class SiliconflowChat(BaseModel):
+    def __init__(self, path: str = '', model: str = "Qwen/Qwen2.5-7B-Instruct") -> None:
+        super().__init__(path)
+        self.model = model
+
+    def chat(self, prompt: str, history: List[dict], content: str) -> str:
+        from openai import OpenAI
+        client = OpenAI()
+        client.api_key = os.getenv("SILICONFLOW_API_KEY")   
+        client.base_url = os.getenv("SILICONFLOW_BASE_URL")
+        final_prompt={'role': 'user', 'content': PROMPT_TEMPLATE['RAG_PROMPT_TEMPALTE'].format(question=prompt, context=content)}
+        print("---------------------input---------------------")
+        print(final_prompt)
+        history.append(final_prompt)
+        response = client.chat.completions.create(
+            model=self.model,
+            messages=history,
+            # max_tokens=150,
+            temperature=0.1
+        )
+        return response.choices[0].message.content

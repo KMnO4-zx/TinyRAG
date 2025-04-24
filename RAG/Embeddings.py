@@ -147,3 +147,24 @@ class BgeEmbedding(BaseEmbeddings):
         model = AutoModel.from_pretrained(path).to(device)
         model.eval()
         return model, tokenizer
+
+# BGE SILICONFLOW API KEY
+
+class BgeWithAPIEmbedding(BaseEmbeddings):
+    """
+    class for SILICON API embeddings
+    """
+    def __init__(self, path: str = '', is_api: bool = True) -> None:
+        super().__init__(path, is_api)
+        if self.is_api:
+            from openai import OpenAI
+            self.client = OpenAI()
+            self.client.api_key = os.getenv("SILICONFLOW_API_KEY")
+            self.client.base_url = os.getenv("SILICONFLOW_BASE_URL")
+
+    def get_embedding(self, text: str, model: str = "BAAI/bge-m3") -> List[float]:
+        if self.is_api:
+            text = text.replace("\n", " ")
+            return self.client.embeddings.create(input=[text], model=model).data[0].embedding
+        else:
+            raise NotImplementedError
